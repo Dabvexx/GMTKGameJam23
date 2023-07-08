@@ -37,15 +37,6 @@ public class PlayerController : MonoBehaviour
     // The hit data of the ground the controller is standing on.
     [HideInInspector] public ControllerColliderHit groundData { get; private set; } = null;
     [HideInInspector] public bool isPlayerGrounded { get; private set; } = true;
-    private bool isSprinting = false;
-
-    [Space(10), Header("Sliding Variables")]
-    [SerializeField, Tooltip("Speed of player sliding down a slope."), Min(0f)] private float slidingSpeed = 10f;
-    [SerializeField, Tooltip("Speed of player input while sliding down a slope."), Min(0f)] private float slidingNudgeSpeed = 10f;
-    [SerializeField, Tooltip("The slope of the ground below the player before they player will slide down it.")] private float slideSlopeLimit = 60f;
-    [SerializeField, Tooltip("The slope of the ground where the player loses the ability to jump out of the slope.")] private float maxSlopeLimit = 80f;
-    private bool isSliding = false;
-
 
     [Space(10), Header("Air Variables")]
     [SerializeField, Tooltip("Speed of player in the air.")] private float airSpeed = 13f;
@@ -62,21 +53,6 @@ public class PlayerController : MonoBehaviour
     // ground timer so the player can go down slopes and stairs without being off the ground.
     private float groundedTimer = 0f;
 
-
-    [Space(10), Header("Wall Jump Variables")]
-    [SerializeField, Tooltip("The strength after jumping off a wall")] private float jumpForce = 5;
-    [SerializeField, Tooltip("The amount of degrees off 90 degrees will still count as being able to wall slide.")] private float angleTolerance = 5;
-    //Check to see if player is touching a wall, maybe begin a wall slide.
-    private bool isTouchingWall = false;
-
-    [Space(10), Header("Below Is Currently Unused")]
-
-    [Space(10), Header("Dash Variables")]
-    [SerializeField] private float dashSpeed;
-    [SerializeField] private Vector3 dashDir;
-    [SerializeField] private Vector3 dashVelocity;
-    [SerializeField] private bool hasDash = true;
-    [SerializeField] private bool isDashing = false;
     #endregion Variables
 
     #region Unity Methods
@@ -108,7 +84,6 @@ public class PlayerController : MonoBehaviour
 
         multiJumpAmount = maxMultiJumps;
         groundData = new ControllerColliderHit();
-        slideSlopeLimit = controller.slopeLimit;
     }
 
     private void LateUpdate()
@@ -122,34 +97,7 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
         CheckIfGrounded();
 
-        // First check if player is sliding
-        // If sliding, make them start going down the hill at a sliding speed
-        // Give the player one double jump when sliding so they can save themselves
-        // If the slope is tagged slippery, make it so jump height is halved or so.
-
-        // Add something so a ground dash works a bit different (LATER!!!!!!)
-        //if (dashAction.triggered && hasDash && Upgrade.Instance.ownDash)
-        //{
-        //}
-
-        //if (isDashing)
-        //{
-        //}
-
-        //CheckIfSliding();
-        CheckIfTouchingWall();
-
-        // TODO: implement a way to make characters move slower depending on a slope till a point where they will slide down it
-        // TODO: instead of an if statement, these could probably simply be added together in order to get a mix of the two vectors, just make sure the slope speed takes presidence
-        // Or make it so a steeper slope will "Fight back" harder to a player trying to walk up it.
-        if (isSliding)
-        {
-            move = CalculateSlidingMovement();
-            //MoveRelativeToCam();
-            FaceTowardMovementAngle();
-        }
-
-        else if (groundedTimer > 0)
+        if (groundedTimer > 0)
         {
             move = CalculateGroundMovement();
             MoveRelativeToCam();
@@ -213,8 +161,6 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private Vector3 CalculateGroundMovement()
     {
-        AdjustVelocityToSlope();
-
         if (sprintAction.IsPressed())
         {
             move *= sprintSpeed;
@@ -248,27 +194,6 @@ public class PlayerController : MonoBehaviour
         }
 
         return move;
-    }
-
-    /// <summary>
-    /// Calculates the movement of a player sliding in a frame.
-    /// </summary>
-    /// <returns></returns>
-    private Vector3 CalculateSlidingMovement()
-    {
-        // TODO: also add something like the grounded timer for jumping so the player will slide down slopes with even small sections of non steep slope so the player cant glitch out the detection.
-        Debug.Log($"Slope: {groundData.normal}");
-        Vector3 slideVelocity = Vector3.ProjectOnPlane(new Vector3(move.x, -slidingSpeed, move.y), groundData.normal);
-        return slideVelocity;
-    }
-
-    // TODO: maybe make this a coroutine;
-    // Stay in dash until it is canceled.
-    private void HandleDash()
-    {
-        // While the dash is still going, Dont change the direction the dash is going.
-        dashDir = transform.forward;
-        dashVelocity = dashDir * dashSpeed * Time.deltaTime;
     }
 
     /// <summary>
@@ -307,23 +232,6 @@ public class PlayerController : MonoBehaviour
         // Player isnt on the ground and is out of double jumps
     }
 
-    private IEnumerator DashCoroutine()
-    {
-        yield return new WaitForEndOfFrame();
-    }
-
-    private void HandleWalljump()
-    {
-        throw new System.NotImplementedException();
-        // If the player is grounded, they cant do a wall jump.
-        // Maybe there can be a little wall hug animation.
-    }
-
-    /*private void HandleTurnaround()
-    {
-        if (Vector3.Dot(prevDir.normalized, move.normalized))
-    }*/
-
     /// <summary>
     /// Checks if the player is grounded, as well as handling a few things around touching the ground.
     /// </summary>
@@ -353,35 +261,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Handles processes with detecting if the player should be sliding down a slope.
-    /// </summary>
-    private void CheckIfSliding()
-    {
-        // TODO: implement that slopes above 80 degreese should be considered very slippery and remove jumps.
-        if (groundData.collider == null)
-        {
-            isSliding = false;
-            return;
-        }
-        // Check if the surface is too steep to stand on and that its tag says the slope wont make the character slip
-        // or if the tag says the surface is slippery / very slippery, always slip.
-        // Very slippery is a more advanced version of slippery where you cant jump out of it either.
-        float angle = Vector3.Angle(groundData.normal, Vector3.up);
-
-        isSliding = (angle > slideSlopeLimit
-            && !groundData.collider.CompareTag("NonSlippery"))
-            || groundData.collider.CompareTag("Slippery") 
-            || groundData.collider.CompareTag("VerySlippery");
-        
-        // If the ground is very slippery, remove the ability to jump as well so the player continues sliding
-        if (groundData.collider.CompareTag("VerySlippery") || angle > maxSlopeLimit)
-        {
-            // Removing jumps and double jumps;
-            multiJumpAmount = 0;
-            groundedTimer = 0;
-        }
-    }
     /// <summary>
     /// Make movement relative to the camera by getting the cameras forward and right transform.
     /// </summary>
@@ -416,66 +295,20 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void FaceTowardMovementAngle()
     {
+        if (-move.x == 0)
+        {
+            return;
+        }
+
         if (move.magnitude > Mathf.Epsilon)
         {
             // Spherically interp for smooth turning.
             transform.rotation = Quaternion.Slerp
                 (
                 transform.rotation,
-                Quaternion.LookRotation(new Vector3(move.x, 0, move.z)),
+                Quaternion.LookRotation(new Vector3(-move.x, 0, 0)),
                 turnSpeed * Time.deltaTime
                 );
-        }
-    }
-
-    private void CheckIfTouchingWall()
-    {
-        // shoot a ray going transform.forward
-        // Do a wall slide if you are touching a wall but also grounded.
-        if (groundData.collider == null)
-        {
-            isTouchingWall = false;
-            return;
-        }
-
-        float angle = Vector3.Angle(groundData.normal, Vector3.up);
-
-        if (angle >= 90 - angleTolerance && angle <= 90 + angleTolerance)
-        {
-            Debug.Log("Touching wall");
-            isSliding = false;
-            isTouchingWall = true;
-            isPlayerGrounded = false;
-            groundedTimer = 0;
-            return;
-        }
-
-        isTouchingWall = true;
-        // If we are touching a wall, force sliding state to false.
-        // If you touch a wall and are not grounded, you will slow down and do a slide which you can then wall jump from.
-    }
-
-    /// <summary>
-    /// Credit to Ketra Games for this slope code.
-    /// https://www.youtube.com/watch?v=PEHtceu7FBw
-    /// </summary>
-    /// <param name="move">The initial movement.</param>
-    /// <returns>New movement aligned to the slope.</returns>
-    private void AdjustVelocityToSlope()
-    {
-        //var slopeRotation = Quaternion.FromToRotation(Vector3.up, groundData.normal);
-        //var adjustedMove = slopeRotation * move;
-
-        //if (adjustedMove.y < 0 )
-        //{
-        //    return adjustedMove;
-        //}
-
-        //return move;
-
-        if (groundData.normal.y < 1)
-        {
-            move.y = groundData.normal.normalized.y;
         }
     }
 

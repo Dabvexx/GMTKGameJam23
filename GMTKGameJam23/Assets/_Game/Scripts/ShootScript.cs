@@ -1,59 +1,124 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 ///<summary>
-/// 
+///
 ///</summary>
 public class ShootScript : MonoBehaviour
 {
     #region Variables
+
     // Variables.
     private float holdTimer = 0f;
+
     private Rigidbody rb;
     private LineRenderer lr;
-    bool isLaunching = false;
-    #endregion
+    private PlayerController pc;
+    private CharacterController cc;
+    private bool isLaunching = false;
+
+    private int mask;
+
+    [SerializeField] Mesh bulletMesh;
+    [SerializeField] Mesh WizMesh;
+    [SerializeField] MeshFilter mf;
+    [SerializeField] GameObject gun;
+
+
+    #endregion Variables
 
     #region Unity Methods
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         lr = GetComponent<LineRenderer>();
+        pc = PlayerController.Instance;
+        cc = GetComponent<CharacterController>();
     }
 
-    void Update()
+    private void Update()
     {
+        lr.SetPosition(1, transform.position);
+        lr.SetPosition(0, transform.position);
+
         if (isLaunching)
         {
             // Detect if we are touching the floor in order to cancel and stand back up.
             // Reenabling the mvoement script and ability to launch again.
+
+            // Rotate toward velocity.
+            var lookRotation = Quaternion.LookRotation(rb.velocity);
+            lookRotation *= Quaternion.Euler(90, 0, 0);
+            rb.MoveRotation(lookRotation);
+
+            // Cancel manually.
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                EndLaunch();
+            }
+            return;
         }
 
-        lr.SetPosition(1, transform.position);
-        lr.SetPosition(0, transform.position);
         if (Input.GetMouseButton(0))
         {
             CalculateTimeHeld();
-            Debug.Log(holdTimer);
+            //Debug.Log(holdTimer);
             lr.SetPosition(1, transform.position + CalculateLaunchAngle() * 7 * holdTimer);
         }
+
         if (Input.GetMouseButtonUp(0))
         {
-            if (holdTimer >= 0.2f)
+            if (holdTimer >= 0.15f)
             {
                 // set rotation to the angle of launch
+                pc.enabled = false;
+                cc.enabled = false;
+                rb.isKinematic = false;
+                rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
+
                 rb.AddForce(CalculateLaunchAngle() * CalculateLaunchForce() * Time.deltaTime, ForceMode.Impulse);
-                holdTimer = 0;
                 // unset this when touching the ground.
                 isLaunching = true;
+                mf.mesh = bulletMesh;
+                gun.SetActive(false);
             }
+
+            holdTimer = 0;
         }
     }
-    #endregion
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Hit enemy detection
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            if (!isLaunching)
+            {
+                // Its so joever, respawn.
+                return;
+            }
+
+            Destroy(other.gameObject);
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (!isLaunching)
+        {
+            return;
+        }
+
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            EndLaunch();
+        }
+    }
+
+    #endregion Unity Methods
 
     #region Private Methods
+
     // Private Methods.
     private Vector3 CalculateLaunchAngle()
     {
@@ -65,7 +130,7 @@ public class ShootScript : MonoBehaviour
 
     private float CalculateLaunchForce()
     {
-        // Calculate force based on base force and a velocity scaler based on how long the mouse is clicked before being released. 
+        // Calculate force based on base force and a velocity scaler based on how long the mouse is clicked before being released.
         return 5000 * holdTimer;
     }
 
@@ -74,11 +139,25 @@ public class ShootScript : MonoBehaviour
         holdTimer += Time.deltaTime;
         holdTimer = Mathf.Clamp(holdTimer, 0f, 1.5f);
     }
+    
+    private void EndLaunch()
+    {
+        pc.enabled = true;
+        cc.enabled = true;
+        rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+        isLaunching = false;
+        mf.mesh = WizMesh;
 
-    #endregion
+        // Make gun visable
+        gun.SetActive(true);
+    }
+
+    #endregion Private Methods
 
     #region Public Methods
+
     // Public Methods.
-    
-    #endregion
+
+    #endregion Public Methods
 }
