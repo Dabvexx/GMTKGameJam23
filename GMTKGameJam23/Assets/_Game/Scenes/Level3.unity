@@ -2854,7 +2854,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 862203021149109210, guid: 26199cfc581c5e04b9c64b0128092556, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -37
       objectReference: {fileID: 0}
     - target: {fileID: 7178685054585166620, guid: 26199cfc581c5e04b9c64b0128092556, type: 3}
       propertyPath: m_Name
@@ -2862,11 +2862,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7204466660623829129, guid: 26199cfc581c5e04b9c64b0128092556, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -37
       objectReference: {fileID: 0}
     - target: {fileID: 7860555379149746236, guid: 26199cfc581c5e04b9c64b0128092556, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -37
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -33835,6 +33835,10 @@ PrefabInstance:
       propertyPath: gun
       value: 
       objectReference: {fileID: 1000127697}
+    - target: {fileID: 4705949672968968974, guid: c52b020ccaa210245aaee518b0e64f16, type: 3}
+      propertyPath: shots
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4705949672968968974, guid: c52b020ccaa210245aaee518b0e64f16, type: 3}
       propertyPath: WizMesh
       value: 

@@ -19,10 +19,8 @@ public class ShowFinalTime : MonoBehaviour
 
     void Start()
     {
-        var timer = FindObjectOfType<SpeedrunTimer>().GetComponent<SpeedrunTimer>();
-        var timeInSeconds = timer.timer;
+        var timeInSeconds = SpeedrunTimer.Instance.timer;
         timeText.text = $"Your Time: {FormatTime(timeInSeconds)}";
-        Destroy(timer.gameObject);
     }
 
     void Update()

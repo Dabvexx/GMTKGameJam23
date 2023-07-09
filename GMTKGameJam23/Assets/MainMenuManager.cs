@@ -16,7 +16,15 @@ public class MainMenuManager : MonoBehaviour
 
     void Start()
     {
-        
+        if (SpeedrunTimer.Instance != null)
+        {
+            Destroy(SpeedrunTimer.Instance.gameObject);
+        }
+
+        if (GameObject.FindGameObjectWithTag("AudioManager"))
+        {
+            Destroy(GameObject.FindGameObjectWithTag("AudioManager"));
+        }
     }
 
     void Update()
