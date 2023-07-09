@@ -27,11 +27,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: bda406e23dfd33d42bcc849a56fd579d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emission:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: bda406e23dfd33d42bcc849a56fd579d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LightingRamp:
@@ -75,9 +75,9 @@ Material:
     - _PixelSize: 2
     m_Colors:
     - _AmbientLight: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _BaseColor: {r: 0.5020524, g: 0.14117645, b: 0.972549, a: 1}
+    - _BaseColor: {r: 0.5372549, g: 0.043137267, b: 0.19270411, a: 1}
     - _EdgeHighlightColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
-    - _EmissionColor: {r: 0.4587075, g: 0.20558918, b: 0.5660378, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0.5}
     - _PixelGridOrigin: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

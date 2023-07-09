@@ -5,11 +5,12 @@ using UnityEngine;
 ///<summary>
 /// 
 ///</summary>
-public class PivotAround : MonoBehaviour
+public class SpeenGun : MonoBehaviour
 {
     #region Variables
     // Variables.
-    public GameObject pivotPoint;
+    [SerializeField] private Transform pivot;
+    [SerializeField] private float spinSpeed;
     #endregion
 
     #region Unity Methods
@@ -21,7 +22,7 @@ public class PivotAround : MonoBehaviour
 
     void Update()
     {
-        transform.RotateAround(pivotPoint.transform.position, pivotPoint.transform.up, 20 * Time.deltaTime);
+        transform.RotateAround(pivot.position, transform.right, spinSpeed * Time.deltaTime);
     }
 
     #endregion
