@@ -27,7 +27,10 @@ public class ShowFinalTime : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FindObjectOfType<LevelLoader>().GetComponent<LevelLoader>().LoadLevel();
+        }
     }
 
     #endregion
