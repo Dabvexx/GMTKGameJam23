@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
         // Reduce the delay timer every frame
         if (jumpDelayTimer > 0)
         {
-            jumpDelayTimer -= Time.deltaTime;
+            jumpDelayTimer -= Time.fixedDeltaTime;
         }
 
         if (jumpAction.triggered)
