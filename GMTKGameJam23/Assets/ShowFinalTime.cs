@@ -17,7 +17,7 @@ public class ShowFinalTime : MonoBehaviour
 
     #region Unity Methods
 
-    void Awake()
+    void Start()
     {
         var timer = FindObjectOfType<SpeedrunTimer>().GetComponent<SpeedrunTimer>();
         var timeInSeconds = timer.timer;

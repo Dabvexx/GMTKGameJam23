@@ -115,19 +115,6 @@ public class ShootScript : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (!isLaunching)
-        {
-            return;
-        }
-
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            EndLaunch();
-        }
-    }
-
     #endregion Unity Methods
 
     #region Private Methods
