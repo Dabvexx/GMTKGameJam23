@@ -31,6 +31,15 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        // R To reload level.
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(LoadLevelCoroutine(SceneManager.GetActiveScene().buildIndex));
+        }
+    }
+
     #endregion
 
     #region Private Methods
@@ -42,16 +51,16 @@ public class LevelLoader : MonoBehaviour
     // Public Methods.
     public void LoadLevel()
     {
-        StartCoroutine(LoadLevelCoroutine(nextScene));
+        StartCoroutine(LoadLevelCoroutine((int)nextScene));
     }
 
-    public IEnumerator LoadLevelCoroutine(Scenes scene)
+    public IEnumerator LoadLevelCoroutine(int sceneIndex)
     {
         transition.SetTrigger("Start");
 
         yield return new WaitForSeconds(transitionLength);
 
-        SceneManager.LoadSceneAsync((int)scene);
+        SceneManager.LoadSceneAsync(sceneIndex);
     }
     #endregion
 

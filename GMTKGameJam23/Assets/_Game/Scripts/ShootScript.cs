@@ -20,6 +20,7 @@ public class ShootScript : MonoBehaviour
 
     [SerializeField] private float launchForce = 5000f;
     [SerializeField] private float maxHoldTime = 1.5f;
+    [SerializeField] public int shots = 2;
 
     [SerializeField] Mesh bulletMesh;
     [SerializeField] Mesh WizMesh;
@@ -75,7 +76,7 @@ public class ShootScript : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (holdTimer >= 0.15f)
+            if (holdTimer >= 0.15f && shots > 0)
             {
                 // set rotation to the angle of launch
                 pc.enabled = false;
@@ -90,6 +91,7 @@ public class ShootScript : MonoBehaviour
                 gun.SetActive(false);
                 glasses.SetActive(false);
                 audioSource.PlayOneShot(shootClip);
+                shots--;
             }
 
             holdTimer = 0;
@@ -109,6 +111,7 @@ public class ShootScript : MonoBehaviour
 
             Destroy(other.gameObject);
             audioSource.PlayOneShot(killClip);
+            shots += 2;
         }
     }
 
