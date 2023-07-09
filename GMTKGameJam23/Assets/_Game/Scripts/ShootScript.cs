@@ -20,7 +20,7 @@ public class ShootScript : MonoBehaviour
 
     [SerializeField] private float launchForce = 5000f;
     [SerializeField] private float maxHoldTime = 1.5f;
-    [SerializeField] public int shots = 2;
+    [SerializeField] public int shots = 3;
 
     [SerializeField] Mesh bulletMesh;
     [SerializeField] Mesh WizMesh;
@@ -111,7 +111,7 @@ public class ShootScript : MonoBehaviour
 
             Destroy(other.gameObject);
             audioSource.PlayOneShot(killClip);
-            shots += 2;
+            shots++;
         }
     }
 

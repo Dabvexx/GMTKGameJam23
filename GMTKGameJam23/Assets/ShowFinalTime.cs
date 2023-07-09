@@ -43,9 +43,4 @@ public class ShowFinalTime : MonoBehaviour
         return string.Format("{0,1:0}:{1,2:00}", t.Minutes, t.Seconds);
     }
     #endregion
-
-    #region Public Methods
-    // Public Methods.
-
-    #endregion
 }

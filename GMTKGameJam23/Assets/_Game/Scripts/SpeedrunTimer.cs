@@ -10,29 +10,15 @@ public class SpeedrunTimer : MonoBehaviour
     #region Variables
     // Variables.
     public float timer = 0f;
+    public int unusedShots = 0;
     #endregion
 
     #region Unity Methods
-
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
         timer += Time.deltaTime;
     }
 
-    #endregion
-
-    #region Private Methods
-    // Private Methods.
-    
-    #endregion
-
-    #region Public Methods
-    // Public Methods.
-    
     #endregion
 }

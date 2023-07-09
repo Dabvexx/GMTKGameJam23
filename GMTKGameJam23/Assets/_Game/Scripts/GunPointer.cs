@@ -36,14 +36,4 @@ public class GunPointer : MonoBehaviour
     }
 
     #endregion
-
-    #region Private Methods
-    // Private Methods.
-    
-    #endregion
-
-    #region Public Methods
-    // Public Methods.
-    
-    #endregion
 }

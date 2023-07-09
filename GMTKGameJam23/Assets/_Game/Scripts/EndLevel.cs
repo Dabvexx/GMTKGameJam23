@@ -7,11 +7,6 @@ using UnityEngine;
 ///</summary>
 public class EndLevel : MonoBehaviour
 {
-    #region Variables
-    // Variables.
-    
-    #endregion
-
     #region Unity Methods
 
     private void OnTriggerEnter(Collider other)
@@ -29,16 +24,6 @@ public class EndLevel : MonoBehaviour
             // So probably not.
         }
     }
-
-    #endregion
-
-    #region Private Methods
-    // Private Methods.
-
-    #endregion
-
-    #region Public Methods
-    // Public Methods.
 
     #endregion
 }

@@ -42,11 +42,6 @@ public class LevelLoader : MonoBehaviour
 
     #endregion
 
-    #region Private Methods
-    // Private Methods.
-
-    #endregion
-
     #region Public Methods
     // Public Methods.
     public void LoadLevel()

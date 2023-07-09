@@ -5831,6 +5831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
+  unusedShots: 0
 --- !u!4 &813212132
 Transform:
   m_ObjectHideFlags: 0
@@ -12603,6 +12604,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 619274340035107175, guid: 709f92d19d113b44ca54e238611d0c1e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 768725181048435689, guid: 709f92d19d113b44ca54e238611d0c1e, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 836c8caa753d7d147b041a6b3271cde3, type: 2}
+    - target: {fileID: 2265472165658700315, guid: 709f92d19d113b44ca54e238611d0c1e, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2758083258192231106, guid: 709f92d19d113b44ca54e238611d0c1e, type: 3}
