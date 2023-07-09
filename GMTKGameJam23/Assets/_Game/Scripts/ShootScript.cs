@@ -76,7 +76,7 @@ public class ShootScript : MonoBehaviour
                 rb.isKinematic = false;
                 rb.constraints &= ~RigidbodyConstraints.FreezeRotationX;
 
-                rb.AddForce(CalculateLaunchAngle() * CalculateLaunchForce() * Time.deltaTime, ForceMode.Impulse);
+                rb.AddForce(CalculateLaunchAngle() * CalculateLaunchForce() * Time.fixedDeltaTime, ForceMode.Impulse);
                 // unset this when touching the ground.
                 isLaunching = true;
                 mf.mesh = bulletMesh;
