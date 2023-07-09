@@ -26,7 +26,9 @@ public class ShootScript : MonoBehaviour
     [SerializeField] MeshFilter mf;
     [SerializeField] GameObject gun;
     [SerializeField] GameObject glasses;
-
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip shootClip;
+    [SerializeField] private AudioClip killClip;
 
     #endregion Variables
 
@@ -38,6 +40,7 @@ public class ShootScript : MonoBehaviour
         lr = GetComponent<LineRenderer>();
         pc = PlayerController.Instance;
         cc = GetComponent<CharacterController>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -86,6 +89,7 @@ public class ShootScript : MonoBehaviour
                 mf.mesh = bulletMesh;
                 gun.SetActive(false);
                 glasses.SetActive(false);
+                audioSource.PlayOneShot(shootClip);
             }
 
             holdTimer = 0;
@@ -104,6 +108,7 @@ public class ShootScript : MonoBehaviour
             }
 
             Destroy(other.gameObject);
+            audioSource.PlayOneShot(killClip);
         }
     }
 
