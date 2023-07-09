@@ -18,10 +18,14 @@ public class ShootScript : MonoBehaviour
 
     private int mask;
 
+    [SerializeField] private float launchForce = 5000f;
+    [SerializeField] private float maxHoldTime = 1.5f;
+
     [SerializeField] Mesh bulletMesh;
     [SerializeField] Mesh WizMesh;
     [SerializeField] MeshFilter mf;
     [SerializeField] GameObject gun;
+    [SerializeField] GameObject glasses;
 
 
     #endregion Variables
@@ -81,6 +85,7 @@ public class ShootScript : MonoBehaviour
                 isLaunching = true;
                 mf.mesh = bulletMesh;
                 gun.SetActive(false);
+                glasses.SetActive(false);
             }
 
             holdTimer = 0;
@@ -131,13 +136,13 @@ public class ShootScript : MonoBehaviour
     private float CalculateLaunchForce()
     {
         // Calculate force based on base force and a velocity scaler based on how long the mouse is clicked before being released.
-        return 5000 * holdTimer;
+        return launchForce * holdTimer;
     }
 
     private void CalculateTimeHeld()
     {
         holdTimer += Time.deltaTime;
-        holdTimer = Mathf.Clamp(holdTimer, 0f, 1.5f);
+        holdTimer = Mathf.Clamp(holdTimer, 0f, maxHoldTime);
     }
     
     private void EndLaunch()
@@ -151,6 +156,7 @@ public class ShootScript : MonoBehaviour
 
         // Make gun visable
         gun.SetActive(true);
+        glasses.SetActive(true);
     }
 
     #endregion Private Methods
